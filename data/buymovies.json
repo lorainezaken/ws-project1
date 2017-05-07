@@ -1,0 +1,41 @@
+
+{
+	"data" : "orderMovie",
+	"movies" : [{
+		"id" : 1,
+		"name" : "Moana",
+		"year" : "2016",
+		"runtime" : "107 Min",
+		"category" : ["Animation","Adventure","Comedy"],
+		"price" : 20,
+		"orders" : 500
+		},
+		{
+		"id" : 2,
+		"name" : "Passengers",
+		"year" : "2016",
+		"runtime" : "116 Min",
+		"category" : ["Adventure", "Drama", "Romance"],
+		"price" : 20,
+		"orders" : 300
+		},
+		{
+		"id" : 3,
+		"name" : "Beauty and the Beast",
+		"year" : "2017",
+		"runtime" : "129 Min",
+		"category" : ["Family", "Fantasy", "Musical"],
+		"price" : 25,
+		"orders" : 700
+		},
+		{
+		"id" : 4,
+		"name" : "Life",
+		"year" : "2017",
+		"runtime" : "104 Min",
+		"category" : ["Horror", "Sci-Fi", "Thriller"],
+		"price" : 20,
+		"orders" : 500
+		}
+	]
+}

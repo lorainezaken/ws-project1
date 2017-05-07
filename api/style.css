@@ -1,0 +1,13 @@
+body {
+	font-family: Arial;
+}
+.wrapper {
+	width: 800px;
+	margin: 0 auto;
+}
+blockquote {
+	margin:0;
+	background: lightgrey;
+	border-left: 7px solid red;
+	padding:20px
+}
