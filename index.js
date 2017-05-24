@@ -2,36 +2,48 @@ const	express = require('express'),
 		bodyParser = require('body-parser'),
 		mod = require('./module.js'),
 		app = express(),
-		port = process.env.port || 3000;
+		port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use('/api', express.static('api'));
 
 app.get('/getAllMovies',(req,res)=>{
-	res.json(mod.getAllMovies());
+	mod.getAllMovies().then(
+		(movies) => {
+	        if(!movies.length)
+	        	res.send({"Error":"No data returned."})
+	        else
+	        	res.json(movies);
+		}, (error) => {
+		    console.log(error);
+	    });
 });
 app.post('/getMovieById/',(req,res)=>{
 	var un = req.body.id;
-	var data = mod.getMovieById(un);
-	if(data == 0){
-		res.status(200).json({"err":"movie not found"});
-	}
-	else{
-		res.status(200).json(data);
-	}
+	mod.getMovieById(un).then(
+		(movies) => {
+	        if(!movies.length)
+	        	res.send({"Error":"No data returned."})
+	        else
+	        	res.json(movies);
+		}, (error) => {
+		    console.log(error);
+	    });
 });
 app.post('/getMovieByPriceAndOrders/',(req,res)=>{
 	var price = req.body.price,
-		orders = req.body.orders,
-		data = mod.getMovieByPriceAndOrders(price,orders);
+		orders = req.body.orders;
 
-	if(data == 0) {
-		res.status(200).json({"err":"movies not found"});
-	}
-	else {
-		res.status(200).json(data);
-	}
+	mod.getMovieByPriceAndOrders(price,orders).then(
+		(movies) => {
+	        if(!movies.length)
+	        	res.send({"Error":"No data returned."})
+	        else
+	        	res.json(movies);
+		}, (error) => {
+		    console.log(error);
+	    });
 });
 app.all('*', (req,res) => {
 	res.json({"Error": "Page not found 404."});

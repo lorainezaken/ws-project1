@@ -1,43 +1,49 @@
-const data = require("./data/buymovies.json");
+const 	mongoose = require('mongoose'),
+		moviesSchema = require('./moviesMlab');
 
-exports.getAllMovies = function() {
-	return data;
-}
+var		consts = require('./consts'),
+		conn = mongoose.connection;
 
-exports.getMovieById = function(un) {
-	let foundMovie = false;
-	for(let i in data.movies){
-		var movie = data.movies[i];
-		if(movie.id == un){
-			console.log(`${data.movies[i].name} has been found.`);
-			foundMovie = true;
-			return movie;
-		}
+mongoose.Promise = global.Promise;
+mongoose.connect(consts.MLAB_KEY);
+User = conn.model('movies', moviesSchema);
+
+conn.on('error', 
+	(err)=> {
+		console.log('connection error: ${err}');
+	});
+
+conn.once('open',
+	()=> {
+		console.log('Connected');
+
+	exports.getAllMovies = function() {
+		return new Promise( (resolve, reject ) => {
+			User.find({},
+				(err, movies) => {
+					if(err) console.log(`Error: ${err}`);
+					resolve(movies);
+				})
+		})
 	}
-	return 0;
-}
 
-exports.getMovieByPriceAndOrders = function(price,orders) {
-	var	dataReturn = '[';
+	exports.getMovieById = function(un) {
+		return new Promise( (resolve, reject ) => {
+			User.find({id:un},
+			(err, movies) => {
+				if(err) console.log(`Error: ${err}`);
+				resolve(movies);
+			})
+		})
+	}
 
-	let dataFound = false;
-
-	for(let i in data.movies){
-		var movie = data.movies[i];
-		if(movie.price == price && movie.orders >= orders){
-			console.log(`${data.movies[i].name} has been found.`);
-			dataFound = true;
-			dataReturn += JSON.stringify(movie);
-			dataReturn += `,`;
-		}
+	exports.getMovieByPriceAndOrders = function(price,orders) {
+		return new Promise( (resolve, reject ) => {
+			User.find({price:price, orders:{$gt:orders}},
+				(err, movies) => {
+					if(err) console.log(`Error: ${err}`);
+					resolve(movies);
+				})
+		})
 	}
-	if(!dataFound){
-		return 0;
-	}
-	else {
-		dataReturn = dataReturn.substr(0,dataReturn.length-1);
-		dataReturn += ']';
-		dataReturn = JSON.parse(dataReturn);
-		return dataReturn;
-	}
-}
+});
